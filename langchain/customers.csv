@@ -1,0 +1,11 @@
+customer_id,name,email,phone,location,site_id,has_proposals
+1,John Doe,john.doe@example.com,555-0101,"New York, NY",101,True
+2,Jane Smith,jane.smith@example.com,555-0102,"Los Angeles, CA",102,True
+3,Peter Jones,peter.jones@example.com,555-0103,"Chicago, IL",103,False
+4,Mary Williams,mary.williams@example.com,555-0104,"Houston, TX",104,True
+5,David Brown,david.brown@example.com,555-0105,"Phoenix, AZ",105,False
+6,Susan Miller,susan.miller@example.com,555-0106,"Philadelphia, PA",106,True
+7,Michael Davis,michael.davis@example.com,555-0107,"San Antonio, TX",107,False
+8,Patricia Garcia,patricia.garcia@example.com,555-0108,"San Diego, CA",108,True
+9,Robert Rodriguez,robert.rodriguez@example.com,555-0109,"Dallas, TX",109,False
+10,Jennifer Martinez,jennifer.martinez@example.com,555-0110,"San Jose, CA",110,True

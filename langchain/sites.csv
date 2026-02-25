@@ -1,0 +1,11 @@
+site_id,customer_id,address,system_size_kw,inverter_brand,module_brand,installation_date,issue_flag,issue_text,recommended_action_text
+101,1,"123 Main St, New York, NY 10001",5.5,"Enphase", "Trina",2022-03-15,False,"",""
+102,2,"456 Oak Ave, Los Angeles, CA 90001",7.2,"SolarEdge","Jinko",2021-11-20,True,"Inverter communication issue","Check inverter network connection and restart."
+103,3,"789 Pine Ln, Chicago, IL 60601",6.0,"GoodWe","Waaree",2023-01-30,False,"",""
+104,4,"101 Maple Dr, Houston, TX 77001",8.5,"Sungrow","Trina",2022-08-10,False,"",""
+105,5,"212 Birch Rd, Phoenix, AZ 85001",4.8,"Enphase","Jinko",2023-05-25,True,"Low production reported.","Panel cleaning recommended due to dust accumulation."
+106,6,"333 Cedar Blvd, Philadelphia, PA 19101",9.0,"SolarEdge","Waaree",2021-09-05,False,"",""
+107,7,"444 Spruce Way, San Antonio, TX 78201",5.2,"GoodWe","Trina",2022-12-18,False,"",""
+108,8,"555 Elm Ct, San Diego, CA 92101",10.1,"Sungrow","Jinko",2023-02-22,False,"",""
+109,9,"666 Willow Pass, Dallas, TX 75201",7.5,"Enphase","Waaree",2021-07-14,True,"System has shut down unexpectedly.","A technician has been scheduled to investigate the issue."
+110,10,"777 Sequoia Ave, San Jose, CA 95101",6.8,"SolarEdge","Trina",2022-10-01,False,"",""
