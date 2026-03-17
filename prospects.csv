@@ -1,0 +1,6 @@
+prospect_id,email,phone,proposal_ids
+201,laura.chen@example.com,555-0201,"501,511,521"
+202,chris.lee@example.com,555-0202,"502,512"
+203,brian.nguyen@example.com,555-0203,"522,523,524"
+204,sandra.kim@example.com,555-0204,"505,515"
+205,kevin.patel@example.com,555-0205,"510,520,530"

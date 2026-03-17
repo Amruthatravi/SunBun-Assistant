@@ -1,0 +1,15 @@
+component_id,type,brand,model,tier
+INV-01,Inverter,GoodWe,GW5000-MS,Budget
+INV-02,Inverter,Growatt,MIN 6000TL-X,Budget
+INV-03,Inverter,Sungrow,SG5.0RS,Standard
+INV-04,Inverter,SMA,Sunny Boy 5.0,Standard
+INV-05,Inverter,Enphase,IQ8M,Premium
+INV-06,Inverter,SolarEdge,SE5000H-US,Premium
+MOD-01,Module,Jinko,Eagle 66,Budget
+MOD-02,Module,Waaree,Aditya 450W,Budget
+MOD-03,Module,Trina,Vertex S,Standard
+MOD-04,Module,Longi,Hi-MO 5,Standard
+MOD-05,Module,REC,Alpha Pure,Premium
+MOD-06,Module,SunPower,Maxeon 3,Premium
+MOD-07,Module,LG,NeON R,Premium
+MOD-08,Module,Panasonic,EverVolt,Premium

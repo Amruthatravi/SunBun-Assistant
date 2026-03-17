@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SunBun Solar Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sun:#F5A623;--sun2:#E8920A;--sun3:#FFC85C;
+  --dark:#0C1220;--dark2:#131C2E;--dark3:#1A2540;
+  --card:#1E2B42;--border:#263450;
+  --text:#E8EDF8;--muted:#7B92B8;--light:#C5D3EC;
+  --green:#34D399;--red:#F87171;--orange:#FB923C;
+  --r:14px;--r2:10px;--r3:8px;
+  --font-h:"Clash Display",sans-serif;
+  --font-b:"Cabinet Grotesk",sans-serif;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+html,body{height:100%;background:var(--dark);color:var(--text);font-family:var(--font-b);font-size:15px;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+#app{min-height:100vh;display:flex;flex-direction:column}
+
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:var(--dark2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:38px;height:38px;background:var(--sun);border-radius:10px;display:grid;place-items:center;font-size:18px}
+.logo-name{font-family:var(--font-h);font-weight:700;font-size:18px}
+.logo-name span{color:var(--sun)}
+.header-badge{font-size:11px;font-weight:600;letter-spacing:.5px;padding:4px 12px;border-radius:20px;background:rgba(52,211,153,0.12);color:var(--green);border:1px solid rgba(52,211,153,0.25);display:flex;align-items:center;gap:6px}
+.header-badge::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* Screens */
+.screen{display:none;flex:1;flex-direction:column;animation:fadeIn .3s ease}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* Landing */
+.landing{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;gap:48px;background:radial-gradient(ellipse at 50% 0%,rgba(245,166,35,0.08) 0%,transparent 65%)}
+.landing-hero{text-align:center;max-width:600px}
+.landing-tag{display:inline-block;margin-bottom:16px;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.8px;background:rgba(245,166,35,0.1);color:var(--sun);border:1px solid rgba(245,166,35,0.25)}
+.landing-title{font-family:var(--font-h);font-size:clamp(32px,5vw,52px);font-weight:700;line-height:1.1;margin-bottom:16px}
+.landing-title span{color:var(--sun)}
+.landing-sub{color:var(--muted);font-size:16px;line-height:1.7;max-width:480px;margin:0 auto}
+.landing-cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:640px}
+.support-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px 24px;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}
+.support-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sun);transform:scaleX(0);transform-origin:left;transition:.25s}
+.support-card:hover{border-color:var(--sun);transform:translateY(-3px);box-shadow:0 16px 40px rgba(245,166,35,0.12)}
+.support-card:hover::before{transform:scaleX(1)}
+.card-icon{font-size:28px;width:52px;height:52px;background:rgba(245,166,35,0.1);border-radius:12px;display:grid;place-items:center}
+.card-title{font-family:var(--font-h);font-size:18px;font-weight:600}
+.card-desc{color:var(--muted);font-size:13px;line-height:1.6}
+.card-arrow{margin-top:auto;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--sun)}
+
+/* Form wrapper */
+.form-wrap{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px;background:radial-gradient(ellipse at 50% 0%,rgba(245,166,35,0.05) 0%,transparent 60%)}
+.form-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;width:100%;max-width:520px;box-shadow:var(--shadow)}
+.form-back{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);cursor:pointer;margin-bottom:16px;transition:color .2s;border:none;background:none;font-family:var(--font-b)}
+.form-back:hover{color:var(--text)}
+.form-step{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--sun);margin-bottom:8px}
+.form-title{font-family:var(--font-h);font-size:22px;font-weight:600;margin-bottom:6px}
+.form-sub{color:var(--muted);font-size:14px;line-height:1.6}
+.progress{height:3px;background:var(--border);border-radius:3px;margin-bottom:28px;overflow:hidden}
+.progress-fill{height:100%;background:var(--sun);border-radius:3px;transition:width .4s ease}
+
+/* Fields */
+.field{margin-bottom:18px}
+.field label{display:block;font-size:13px;font-weight:500;color:var(--light);margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;background:var(--dark3);border:1px solid var(--border);border-radius:var(--r3);padding:11px 14px;color:var(--text);font-family:var(--font-b);font-size:14px;outline:none;transition:border-color .2s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--sun)}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted)}
+.field select option{background:var(--dark3)}
+.field textarea{resize:vertical;min-height:90px;line-height:1.5}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* ID type buttons */
+.id-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.id-btn{padding:14px;border:1px solid var(--border);border-radius:var(--r3);background:var(--dark3);cursor:pointer;text-align:center;transition:all .2s;font-family:var(--font-b);color:var(--muted);font-size:14px}
+.id-btn:hover,.id-btn.active{border-color:var(--sun);color:var(--sun);background:rgba(245,166,35,0.06)}
+.id-btn .icon{font-size:20px;display:block;margin-bottom:6px}
+
+/* OTP */
+.otp-wrap{display:flex;gap:10px;justify-content:center;margin:20px 0}
+.otp-wrap input{width:48px;height:56px;text-align:center;font-size:22px;font-weight:700;background:var(--dark3);border:1px solid var(--border);border-radius:var(--r3);color:var(--text);outline:none;transition:border-color .2s;font-family:var(--font-h)}
+.otp-wrap input:focus{border-color:var(--sun)}
+.otp-wrap input.filled{border-color:rgba(245,166,35,0.5)}
+.otp-wrap input.otp-err{border-color:var(--red)}
+.dev-otp{text-align:center;font-size:12px;color:var(--muted);background:rgba(245,166,35,0.05);border:1px solid rgba(245,166,35,0.15);border-radius:6px;padding:8px;margin-bottom:16px}
+.dev-otp strong{color:var(--sun)}
+
+/* Toggle buttons */
+.toggle-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.toggle-btn{padding:10px 18px;border:1px solid var(--border);border-radius:var(--r3);background:var(--dark3);cursor:pointer;transition:all .2s;font-family:var(--font-b);color:var(--muted);font-size:13px}
+.toggle-btn:hover,.toggle-btn.active{border-color:var(--sun);color:var(--sun);background:rgba(245,166,35,0.06)}
+
+/* Checkboxes */
+.check-group{display:flex;flex-direction:column;gap:8px}
+.check-item{display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 14px;border:1px solid var(--border);border-radius:var(--r3);background:var(--dark3);transition:all .2s}
+.check-item:hover{border-color:rgba(245,166,35,0.4)}
+.check-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--sun);cursor:pointer}
+.check-item.selected{border-color:var(--sun);background:rgba(245,166,35,0.06)}
+.check-item span{font-size:13px;color:var(--light)}
+
+/* Buttons */
+.btn{width:100%;padding:13px;border-radius:var(--r3);font-family:var(--font-b);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+.btn-primary{background:var(--sun);color:#0C1220}
+.btn-primary:hover{background:var(--sun2);transform:translateY(-1px)}
+.btn-primary:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;transform:none}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--sun);color:var(--sun)}
+.btn-danger{background:transparent;border:1px solid rgba(248,113,113,0.4);color:var(--red)}
+.btn-danger:hover{background:rgba(248,113,113,0.08)}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.btn-ghost{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:var(--font-b);padding:8px;text-decoration:underline;transition:color .2s}
+.btn-ghost:hover{color:var(--text)}
+
+/* Info card */
+.info-card{background:var(--dark3);border:1px solid var(--border);border-radius:var(--r2);padding:18px;margin-bottom:18px}
+.info-card.issue{border-color:rgba(248,113,113,0.4);background:rgba(248,113,113,0.05)}
+.info-card.ok{border-color:rgba(52,211,153,0.3);background:rgba(52,211,153,0.04)}
+.ic-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.ic-text{font-size:14px;line-height:1.7;color:var(--light)}
+.ic-badge{display:inline-block;margin-top:10px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.ic-badge.red{background:rgba(248,113,113,0.15);color:var(--red);border:1px solid rgba(248,113,113,0.3)}
+.ic-badge.green{background:rgba(52,211,153,0.12);color:var(--green);border:1px solid rgba(52,211,153,0.25)}
+
+/* Metrics */
+.metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.metric-box{background:var(--dark3);border:1px solid var(--border);border-radius:var(--r3);padding:14px;text-align:center}
+.metric-box .m-label{font-size:10px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px}
+.metric-box .m-val{font-family:var(--font-h);font-size:20px;font-weight:700;color:var(--sun)}
+
+/* Proposal cards */
+.proposals-grid{display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
+.proposal-card{background:var(--dark3);border:2px solid var(--border);border-radius:var(--r2);padding:18px;cursor:pointer;transition:all .22s;position:relative}
+.proposal-card:hover{border-color:var(--sun);transform:translateX(4px)}
+.proposal-card.selected{border-color:var(--sun);background:rgba(245,166,35,0.05)}
+.pc-name{font-family:var(--font-h);font-weight:600;font-size:15px;margin-bottom:10px}
+.pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pc-item .label{font-size:11px;color:var(--muted);margin-bottom:2px}
+.pc-item .val{font-size:14px;font-weight:600;color:var(--light)}
+.pc-price{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-family:var(--font-h);font-size:17px;color:var(--sun)}
+.select-dot{position:absolute;top:14px;right:14px;width:20px;height:20px;border-radius:50%;border:2px solid var(--border);transition:all .2s}
+.proposal-card.selected .select-dot{background:var(--sun);border-color:var(--sun)}
+.proposal-card.selected .select-dot::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:11px;color:#0C1220;font-weight:700}
+
+/* NPS */
+.nps-wrap{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:16px 0}
+.nps-btn{width:44px;height:44px;border-radius:var(--r3);border:1px solid var(--border);background:var(--dark3);color:var(--muted);font-weight:600;font-size:14px;cursor:pointer;transition:all .2s;font-family:var(--font-h)}
+.nps-btn:hover,.nps-btn.active{background:var(--sun);color:#0C1220;border-color:var(--sun)}
+
+/* File upload */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--r3);padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--dark3)}
+.upload-zone:hover{border-color:var(--sun);background:rgba(245,166,35,0.03)}
+.upload-zone input{display:none}
+.uz-icon{font-size:28px;margin-bottom:8px}
+.uz-text{font-size:13px;color:var(--muted)}
+.uz-text strong{color:var(--sun)}
+.file-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.file-chip{display:flex;align-items:center;gap:6px;padding:5px 10px;background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.25);border-radius:20px;font-size:12px;color:var(--sun)}
+.file-chip button{background:none;border:none;color:var(--sun);cursor:pointer;font-size:14px;line-height:1}
+
+/* Agent chat */
+.chat-wrap{flex:1;display:flex;flex-direction:column;max-width:680px;width:100%;margin:0 auto;padding:24px;gap:16px}
+.agent-header{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;display:flex;align-items:center;gap:14px}
+.agent-av{width:42px;height:42px;background:linear-gradient(135deg,var(--sun),var(--sun2));border-radius:50%;display:grid;place-items:center;font-size:18px;flex-shrink:0}
+.agent-info .a-name{font-family:var(--font-h);font-weight:600;font-size:15px}
+.agent-info .a-status{font-size:12px;color:var(--green);display:flex;align-items:center;gap:5px}
+.agent-info .a-status::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%}
+.chat-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;min-height:320px;max-height:440px}
+.msg{display:flex;gap:10px;max-width:78%;animation:msgIn .25s ease both}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.msg.agent{align-self:flex-start}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg-av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;flex-shrink:0;margin-top:2px}
+.msg.agent .msg-av{background:linear-gradient(135deg,var(--sun),var(--sun2))}
+.msg.user .msg-av{background:var(--dark3);border:1px solid var(--border)}
+.bubble{padding:11px 15px;border-radius:16px;font-size:14px;line-height:1.6;word-break:break-word}
+.msg.agent .bubble{background:var(--dark3);border:1px solid var(--border);border-top-left-radius:4px}
+.msg.user .bubble{background:var(--sun);color:#0C1220;font-weight:500;border-top-right-radius:4px}
+.msg-time{font-size:10px;color:var(--muted);margin-top:4px}
+.msg.user .msg-time{text-align:right}
+.typing-bubble{display:flex;gap:4px;align-items:center;padding:14px 16px}
+.typing-bubble span{width:7px;height:7px;background:var(--sun);border-radius:50%;animation:bounce .9s infinite}
+.typing-bubble span:nth-child(2){animation-delay:.15s}
+.typing-bubble span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-6px);opacity:1}}
+.chat-input-row{display:flex;gap:10px;align-items:flex-end;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px}
+.chat-input-row textarea{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:var(--font-b);font-size:14px;resize:none;max-height:100px;line-height:1.5}
+.chat-input-row textarea::placeholder{color:var(--muted)}
+.send-btn{width:38px;height:38px;background:var(--sun);border:none;border-radius:10px;cursor:pointer;display:grid;place-items:center;flex-shrink:0;transition:all .2s}
+.send-btn:hover{background:var(--sun2)}
+.send-btn:disabled{background:var(--border);cursor:not-allowed}
+.send-btn svg{width:16px;height:16px;fill:none;stroke:#0C1220;stroke-width:2}
+
+/* Ended */
+.ended-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px}
+.ended-box{text-align:center;max-width:420px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:40px 32px}
+.ended-icon{font-size:48px;margin-bottom:16px}
+.ended-title{font-family:var(--font-h);font-size:22px;font-weight:600;margin-bottom:10px}
+.ended-text{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:24px}
+.ticket-badge{display:inline-block;padding:8px 20px;border-radius:8px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);color:var(--sun);font-family:var(--font-h);font-size:18px;font-weight:700;margin-bottom:20px}
+
+/* Alert banners */
+.alert{padding:12px 14px;border-radius:var(--r3);margin-bottom:16px;font-size:13px;line-height:1.5}
+.alert-err{background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);color:var(--red)}
+.alert-info{background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.2);color:var(--sun)}
+
+/* Locked screen */
+.locked-box{text-align:center;padding:8px 0}
+.locked-icon{font-size:52px;margin-bottom:16px}
+.locked-title{font-family:var(--font-h);font-size:20px;font-weight:600;margin-bottom:10px;color:var(--red)}
+.locked-sub{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:28px}
+
+/* Spinner / Toast */
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.2);border-top-color:#0C1220;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border);border-radius:var(--r3);padding:12px 18px;font-size:13px;color:var(--text);box-shadow:var(--shadow);z-index:999;transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none;max-width:320px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.err{border-color:var(--red);color:var(--red)}
+.toast.ok{border-color:var(--green);color:var(--green)}
+
+@media(max-width:600px){
+  .landing-cards{grid-template-columns:1fr}
+  .header{padding:14px 16px}
+  .form-wrap{padding:20px 16px}
+  .form-box{padding:22px 18px}
+  .field-row{grid-template-columns:1fr}
+  .metrics-grid{grid-template-columns:1fr 1fr}
+  .otp-wrap input{width:40px;height:50px;font-size:18px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon">☀️</div>
+    <div class="logo-name">Sun<span>Bun</span> Solar</div>
+  </div>
+  <div class="header-badge">AI Assistant Online</div>
+</header>
+
+<!-- ══ LANDING ═══════════════════════════════════ -->
+<div id="s-landing" class="screen active">
+  <div class="landing">
+    <div class="landing-hero">
+      <div class="landing-tag">☀️ SMART SOLAR ASSISTANT</div>
+      <h1 class="landing-title">Welcome to<br/><span>SunBun Solar</span></h1>
+      <p class="landing-sub">Instant support for your solar journey — explore a new system or get help with an existing one.</p>
+    </div>
+    <div class="landing-cards">
+      <div class="support-card" onclick="chooseSupportType('sales')">
+        <div class="card-icon">🔆</div>
+        <div>
+          <div class="card-title">Sales Support</div>
+          <div class="card-desc">Interested in buying or upgrading a solar system. Get a custom proposal.</div>
+        </div>
+        <div class="card-arrow">Get Started →</div>
+      </div>
+      <div class="support-card" onclick="chooseSupportType('service')">
+        <div class="card-icon">🔧</div>
+        <div>
+          <div class="card-title">Service Support</div>
+          <div class="card-desc">Need help with your existing solar system — diagnostics, issues or tickets.</div>
+        </div>
+        <div class="card-arrow">Get Help →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ AUTH — CHOOSE ID ════════════════════════ -->
+<div id="s-auth-id" class="screen">
+  <div class="form-wrap"><div class="form-box">
+    <button class="form-back" onclick="show('s-landing')">← Back</button>
+    <div class="form-step">Step 1 of 3 · Authentication</div>
+    <div class="progress"><div class="progress-fill" style="width:33%"></div></div>
+    <div class="form-title">Verify Your Identity</div>
+    <div class="form-sub" style="margin-bottom:20px">Please continue with your registered email or phone number.</div>
+    <div id="auth-banner"></div>
+    <div class="id-btns">
+      <div class="id-btn active" id="btn-email" onclick="selectId('email')"><span class="icon">✉️</span>Use Email</div>
+      <div class="id-btn" id="btn-phone" onclick="selectId('phone')"><span class="icon">📱</span>Use Phone</div>
+    </div>
+    <div class="field">
+      <label id="contact-label">Enter your email address</label>
+      <input type="email" id="contact-input" placeholder="you@example.com" oninput="checkContact()"/>
+    </div>
+    <button class="btn btn-primary" id="btn-send-otp" onclick="sendContact()" disabled>Send One-Time Code</button>
+  </div></div>
+</div>
+
+<!-- ══ AUTH — OTP ══════════════════════════════ -->
+<div id="s-auth-otp" class="screen">
+  <div class="form-wrap"><div class="form-box">
+    <div class="form-step">Step 2 of 3 · Verification</div>
+    <div class="progress"><div class="progress-fill" style="width:66%"></div></div>
+    <div class="form-title">Enter Your Code</div>
+    <div class="form-sub" id="otp-sub" style="margin-bottom:20px">We've sent a 6-digit code to your email.</div>
+    <div id="dev-hint" class="dev-otp" style="display:none">🔧 Dev OTP: <strong id="dev-otp-val"></strong></div>
+    <div class="otp-wrap" id="otp-inputs"></div>
+    <p id="otp-err" style="text-align:center;color:var(--red);font-size:13px;margin-bottom:14px;min-height:18px"></p>
+    <button class="btn btn-primary" id="btn-verify" onclick="verifyOTP()" disabled>Verify & Continue</button>
+    <div style="text-align:center;margin-top:14px">
+      <button class="btn-ghost" onclick="backToContact()">← Use a different email/phone</button>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ AUTH — LOCKED ══════════════════════════ -->
+<div id="s-auth-locked" class="screen">
+  <div class="form-wrap"><div class="form-box">
+    <div class="locked-box">
+      <div class="locked-icon">🔒</div>
+      <div class="locked-title">Too Many Failed Attempts</div>
+      <div class="locked-sub">We couldn't verify your identity after 3 attempts.<br/>Would you like to try with a different email or phone number?</div>
+      <div class="btn-row">
+        <button class="btn btn-danger" onclick="exitToLanding()">✕ Exit</button>
+        <button class="btn btn-primary" onclick="doRetry()">🔄 Try Again</button>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ SERVICE — DIAGNOSIS ════════════════════ -->
+<div id="s-service-diagnosis" class="screen">
+  <div class="form-wrap"><div class="form-box">
+    <div class="form-step">Service Support · System Check</div>
+    <div class="form-title">Your System Status</div>
+    <div class="form-sub" style="margin-bottom:20px">Here's what we found in our monitoring platform.</div>
+    <div id="diagnosis-content"></div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="serviceRes(true)">✅ I'm satisfied</button>
+      <button class="btn btn-primary" onclick="serviceRes(false)">🔧 I still need help</button>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ SERVICE — NPS ══════════════════════════ -->
+<div id="s-service-nps" class="screen">
+  <div class="form-wrap"><div class="form-box">
+    <div class="form-step">Service Support · Feedback</div>
+    <div class="form-title">Rate Your Experience</div>
+    <div class="form-sub" style="margin-bottom:20px">How satisfied are you with the support you received?</div>
+    <div class="nps-wrap" id="nps-btns"></div>
+    <div class="field" style="margin-top:16px">
+      <label>Any additional feedback? (optional)</label>
+      <textarea id="nps-feedback" placeholder="Share your thoughts..."></textarea>
+    </div>
+    <button class="btn btn-primary" id="btn-nps" onclick="submitNPS()" disabled>Submit Feedback</button>
+  </div></div>
+</div>
+
+<!-- ══ SERVICE — ESCALATION ═══════════════════ -->
+<div id="s-service-escalation" class="screen">
+  <div class="form-wrap"><div class="form-box">
+    <div class="form-step">Service Support · Issue Details</div>
+    <div class="form-title">Tell Us More</div>
+    <div class="form-sub" style="margin-bottom:20px">Help us understand your issue so we can assist better.</div>
+    <div class="field">
+      <label>Issue Category <span style="color:var(--red)">*</span></label>
+      <div class="check-group" id="cat-list"></div>
+    </div>
+    <div class="field">
+      <label>Describe the issue <span style="color:var(--red)">*</span></label>
+      <textarea id="esc-desc" placeholder="Explain what you're experiencing..." oninput="checkEsc()"></textarea>
+    </div>
+    <div class="field">
+      <label>Upload Photos / Screenshots (optional)</label>
+      <div class="upload-zone" onclick="document.getElementById('esc-files').click()">
+        <input type="file" id="esc-files" multiple accept="image/*,.pdf" onchange="addFiles(this,'esc')"/>
+        <div class="uz-icon">📎</div>
+        <div class="uz-text"><strong>Click to upload</strong> or drag files here</div>
+      </div>
+      <div class="file-chips" id="esc-chips"></div>
+    </div>
+    <button class="btn btn-primary" id="btn-esc" onclick="submitEsc()" disabled>Submit & Check Availability</button>
+  </div></div>
+</div>
+
+<!-- ══ SERVICE — AGENT OFFER ═════════════════ -->
+<div id="s-agent-offer" class="screen">
+  <div class="form-wrap"><div class="form-box" style="text-align:center">
+    <div style="font-size:52px;margin-bottom:16px">👤</div>
+    <div class="form-title" id="offer-title">Agent Available</div>
+    <div class="form-sub" id="offer-msg" style="margin:10px 0 28px"></div>
+    <div class="btn-row">
+      <button class="btn btn-outline" id="btn-ticket" onclick="agentHandoff(false)">📋 Create Ticket</button>
+      <button class="btn btn-primary" id="btn-livechat" onclick="agentHandoff(true)">💬 Start Live Chat</button>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ SERVICE — NOT FOUND ════════════════════ -->
+<div id="s-service-notfound" class="screen">
+  <div class="form-wrap"><div class="form-box">
+    <div class="form-title">System Not Found</div>
+    <div class="form-sub" style="margin:12px 0 24px">We couldn't find a system matching your details. If you're an existing SunBun customer, please use the same email/phone from your monitoring portal.</div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="retryContact()">🔄 Try Different Contact</button>
+      <button class="btn btn-primary" onclick="show('s-external')">Continue Anyway →</button>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ SERVICE — EXTERNAL FORM ═══════════════ -->
+<div id="s-external" class="screen">
+  <div class="form-wrap"><div class="form-box">
+    <div class="form-step">Service Support · External System</div>
+    <div class="form-title">Tell Us About Your System</div>
+    <div class="form-sub" style="margin-bottom:20px">We can still help — just need a few details about your setup.</div>
+    <div class="field-row">
+      <div class="field"><label>System Size (kWp)</label><input id="ext-size" placeholder="e.g. 5"/></div>
+      <div class="field"><label>Year of Installation</label><input id="ext-year" placeholder="e.g. 2022"/></div>
+    </div>
+    <div class="field"><label>Inverter Brand / Model</label><input id="ext-brand" placeholder="e.g. Sungrow SG5KTL"/></div>
+    <div class="field">
+      <label>Online Monitoring Active?</label>
+      <select id="ext-mon"><option value="">Select...</option><option>Yes</option><option>No</option><option>Don't know</option></select>
+    </div>
+    <div class="field"><label>Who Installed Your System?</label><input id="ext-installer" placeholder="Installer name or 'Don't remember'"/></div>
+    <div class="field">
+      <label>Issue Category <span style="color:var(--red)">*</span></label>
+      <select id="ext-cat"><option value="">Select...</option><option>Production Issue</option><option>System Not Working</option><option>Communication Loss</option><option>Battery Failure</option><option>Inverter Failure</option><option>Others</option></select>
+    </div>
+    <div class="field"><label>Describe the Issue <span style="color:var(--red)">*</span></label><textarea id="ext-desc" placeholder="What are you experiencing?"></textarea></div>
+    <div class="field">
+      <label>Upload Photos (optional)</label>
+      <div class="upload-zone" onclick="document.getElementById('ext-files').click()">
+        <input type="file" id="ext-files" multiple accept="image/*" onchange="addFiles(this,'ext')"/>
+        <div class="uz-icon">📎</div>
+        <div class="uz-text"><strong>Click to upload</strong> photos or screenshots</div>
+      </div>
+      <div class="file-chips" id="ext-chips"></div>
+    </div>
+    <button class="btn btn-primary" id="btn-ext" onclick="submitExternal()">Submit →</button>
+  </div></div>
+</div>
+
+<!-- ══ SALES — HAS PROPOSALS ═════════════════ -->
+<div id="s-sales-hasproposals" class="screen">
+  <div class="form-wrap"><div class="form-box">
+    <div class="form-step">Sales Support</div>
+    <div class="form-title" id="sales-greet">Welcome back!</div>
+    <div class="form-sub" style="margin-bottom:20px">We found previous proposals for your account.</div>
+    <div id="old-proposals" class="proposals-grid"></div>
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="show('s-sales-newform')">✨ Create New Options</button>
+      <button class="btn btn-primary" id="btn-old-proceed" onclick="proceedOld()" disabled>Proceed with Selected →</button>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ SALES — NEW PROPOSAL FORM ════════════ -->
+<div id="s-sales-newform" class="screen">
+  <div class="form-wrap"><div class="form-box">
+    <div class="form-step">Sales Support · New Proposal</div>
+    <div class="form-title">Design Your Solar Solution</div>
+    <div class="form-sub" style="margin-bottom:20px">Tell us about your needs and we'll create customized options.</div>
+    <div class="field-row">
+      <div class="field"><label>Full Name</label><input id="np-name" placeholder="Your full name"/></div>
+      <div class="field"><label>City</label><input id="np-city" placeholder="Your city"/></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Postal Code</label><input id="np-postal" placeholder="e.g. 400001"/></div>
+      <div class="field" id="np-email-wrap"><label>Email Address</label><input id="np-email" placeholder="you@email.com"/></div>
+    </div>
+    <div class="field" id="np-phone-wrap"><label>Phone Number</label><input id="np-phone" placeholder="e.g. 555-0101"/></div>
+    <div class="field">
+      <label>Customer Segment <span style="color:var(--red)">*</span></label>
+      <div class="toggle-btns" id="seg-btns">
+        <div class="toggle-btn" onclick="pick(this,'seg','Residential')">🏠 Residential</div>
+        <div class="toggle-btn" onclick="pick(this,'seg','Commercial')">🏢 Commercial</div>
+        <div class="toggle-btn" onclick="pick(this,'seg','Industrial')">🏭 Industrial</div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Avg Monthly Bill ($)</label><input type="number" id="np-bill" placeholder="e.g. 150" min="1"/></div>
+      <div class="field"><label>Expected Increase (%)</label><input type="number" id="np-increase" placeholder="e.g. 10" min="0"/></div>
+    </div>
+    <div class="field">
+      <label>Number of Options</label>
+      <div class="toggle-btns" id="num-btns">
+        <div class="toggle-btn active" onclick="pick(this,'num',1)">1 Option</div>
+        <div class="toggle-btn" onclick="pick(this,'num',2)">2 Options</div>
+        <div class="toggle-btn" onclick="pick(this,'num',3)">3 Options</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Brand Preferences (optional)</label>
+      <input id="np-brand" placeholder="e.g. Enphase, Jinko — or leave blank" oninput="toggleTier()"/>
+    </div>
+    <div class="field" id="tier-wrap" style="display:block">
+      <label>Equipment Tier</label>
+      <div class="toggle-btns" id="tier-btns">
+        <div class="toggle-btn" onclick="pick(this,'tier','Premium')">⭐ Premium</div>
+        <div class="toggle-btn active" onclick="pick(this,'tier','Standard')">✅ Standard</div>
+        <div class="toggle-btn" onclick="pick(this,'tier','Budget')">💰 Budget</div>
+      </div>
+    </div>
+    <div id="np-err"></div>
+    <button class="btn btn-primary" id="btn-gen" onclick="submitProposalForm()">Generate My Proposals →</button>
+  </div></div>
+</div>
+
+<!-- ══ SALES — SHOW PROPOSALS ════════════════ -->
+<div id="s-sales-proposals" class="screen">
+  <div class="form-wrap"><div class="form-box">
+    <div class="form-step">Sales Support · Your Options</div>
+    <div class="form-title">Your Solar Proposals</div>
+    <div class="form-sub" style="margin-bottom:20px">Select the option that best fits your needs.</div>
+    <div id="new-proposals" class="proposals-grid"></div>
+    <button class="btn btn-primary" id="btn-new-proceed" onclick="proceedNew()" disabled>Proceed with Selected →</button>
+    <div style="text-align:center;margin-top:12px">
+      <button class="btn-ghost" onclick="show('s-sales-newform')">← Adjust Requirements</button>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ SALES — CONFIRM ════════════════════════ -->
+<div id="s-sales-confirm" class="screen">
+  <div class="form-wrap"><div class="form-box">
+    <div class="form-step">Sales Support · Confirm</div>
+    <div class="form-title">Almost There!</div>
+    <div class="form-sub" style="margin-bottom:20px">How would you like to connect with our sales team?</div>
+    <div id="confirm-card" class="info-card ok"></div>
+    <div id="confirm-agent-section"></div>
+  </div></div>
+</div>
+
+<!-- ══ AGENT CHAT ════════════════════════════ -->
+<div id="s-agent-chat" class="screen">
+  <div class="chat-wrap">
+    <div class="agent-header">
+      <div class="agent-av">👤</div>
+      <div class="agent-info">
+        <div class="a-name" id="chat-agent-name">Support Agent</div>
+        <div class="a-status">Connected · Live Chat</div>
+      </div>
+      <button onclick="startOver()" style="margin-left:auto;background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.3);color:#F87171;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:var(--font-b);font-size:13px;font-weight:600;">✕ End & Home</button>
+    </div>
+    <div class="chat-messages" id="chat-msgs"></div>
+    <div class="chat-input-row">
+      <textarea id="chat-input" rows="1" placeholder="Type your message…" onkeydown="chatKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="btn-send" onclick="sendChat()">
+        <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ENDED ════════════════════════════════ -->
+<div id="s-ended" class="screen">
+  <div class="ended-wrap"><div class="ended-box">
+    <div class="ended-icon" id="ended-icon">✅</div>
+    <div class="ended-title" id="ended-title">All Done!</div>
+    <div id="ended-ticket-wrap" style="display:none">
+      <div style="color:var(--muted);font-size:13px;margin-bottom:8px">Your Ticket Number</div>
+      <div class="ticket-badge" id="ended-ticket-num"></div>
+    </div>
+    <div class="ended-text" id="ended-msg"></div>
+    <button class="btn btn-primary" onclick="startOver()">Start New Conversation</button>
+  </div></div>
+</div>
+
+</div><!-- #app -->
+<div class="toast" id="toast"></div>
+
+<script>
+const API = "http://127.0.0.1:8000";
+
+// ── State ────────────────────────────────────
+let sid  = mkId();
+let idType = "email";
+let picks  = { seg: null, num: 1, tier: "Standard" };
+let selOldId = null, selNewId = null, selNPS = null;
+let cats = [];
+let uploaded = { esc: [], ext: [] };
+
+function mkId(){ return "sb_" + Math.random().toString(36).slice(2,10); }
+
+// ── Screen ───────────────────────────────────
+function show(id){
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0, 0);
+}
+
+// ── Landing ──────────────────────────────────
+async function chooseSupportType(type){
+  const res = await api("/start", { session_id: sid, support_type: type });
+  if(res) show("s-auth-id");
+}
+
+// ── Auth: ID type ─────────────────────────────
+function selectId(type){
+  idType = type;
+  document.getElementById("btn-email").classList.toggle("active", type === "email");
+  document.getElementById("btn-phone").classList.toggle("active", type === "phone");
+  const inp = document.getElementById("contact-input");
+  const lbl = document.getElementById("contact-label");
+  if(type === "email"){
+    lbl.textContent = "Enter your email address";
+    inp.type = "email"; inp.placeholder = "you@example.com";
+  } else {
+    lbl.textContent = "Enter your mobile number";
+    inp.type = "tel"; inp.placeholder = "e.g. 555-0101";
+  }
+  inp.value = "";
+  document.getElementById("btn-send-otp").disabled = true;
+}
+
+function checkContact(){
+  const v = document.getElementById("contact-input").value.trim();
+  document.getElementById("btn-send-otp").disabled = v.length < 5;
+}
+
+async function sendContact(){
+  const contact = document.getElementById("contact-input").value.trim();
+  const btn = document.getElementById("btn-send-otp");
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  const res = await api("/auth/contact", { session_id: sid, id_type: idType, contact });
+  btn.textContent = "Send One-Time Code";
+  if(!res){ btn.disabled = false; return; }
+
+  buildOTP();
+  document.getElementById("otp-sub").textContent =
+    `We've sent a 6-digit code to your ${idType}: ${contact}`;
+  document.getElementById("otp-err").textContent = "";
+  document.getElementById("dev-hint").style.display = res.dev_otp ? "block" : "none";
+  if(res.dev_otp) document.getElementById("dev-otp-val").textContent = res.dev_otp;
+
+  const vb = document.getElementById("btn-verify");
+  vb.textContent = "Verify & Continue"; vb.disabled = true; vb.onclick = verifyOTP;
+  show("s-auth-otp");
+}
+
+function backToContact(){ show("s-auth-id"); }
+
+// ── Auth: OTP ─────────────────────────────────
+function buildOTP(){
+  const wrap = document.getElementById("otp-inputs");
+  wrap.innerHTML = "";
+  for(let i = 0; i < 6; i++){
+    const inp = document.createElement("input");
+    inp.maxLength = 1; inp.inputMode = "numeric"; inp.dataset.i = i;
+    inp.addEventListener("input", otpIn);
+    inp.addEventListener("keydown", otpKey);
+    wrap.appendChild(inp);
+  }
+}
+function otpIn(e){
+  e.target.value = e.target.value.replace(/\D/g, "");
+  e.target.classList.toggle("filled", !!e.target.value);
+  e.target.classList.remove("otp-err");
+  const i = parseInt(e.target.dataset.i);
+  if(e.target.value && i < 5) e.target.parentElement.children[i+1].focus();
+  document.getElementById("btn-verify").disabled = getOTP().length < 6;
+}
+function otpKey(e){
+  const i = parseInt(e.target.dataset.i);
+  if(e.key === "Backspace" && !e.target.value && i > 0)
+    e.target.parentElement.children[i-1].focus();
+}
+function getOTP(){
+  return Array.from(document.getElementById("otp-inputs").children).map(i => i.value).join("");
+}
+function shakeOTP(){
+  document.querySelectorAll("#otp-inputs input").forEach(i => {
+    i.classList.add("otp-err"); i.value = ""; i.classList.remove("filled");
+  });
+  document.getElementById("otp-inputs").children[0]?.focus();
+  document.getElementById("btn-verify").disabled = true;
+}
+
+async function verifyOTP(){
+  const btn = document.getElementById("btn-verify");
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  document.getElementById("otp-err").textContent = "";
+  const res = await api("/auth/otp", { session_id: sid, otp: getOTP() });
+  if(!res){ btn.textContent = "Verify & Continue"; btn.disabled = false; return; }
+
+  if(!res.verified){
+    shakeOTP();
+    if(res.locked){
+      show("s-auth-locked");
+    } else {
+      document.getElementById("otp-err").textContent = res.message;
+      btn.textContent = "Verify & Continue";
+    }
+    return;
+  }
+  routeAfterAuth(res);
+}
+
+async function doRetry(){
+  const res = await api("/auth/retry", { session_id: sid });
+  if(res){
+    document.getElementById("contact-input").value = "";
+    document.getElementById("btn-send-otp").disabled = true;
+    document.getElementById("auth-banner").innerHTML =
+      `<div class="alert alert-info">ℹ️ Please try a different email or phone number.</div>`;
+    show("s-auth-id");
+  }
+}
+
+async function retryContact(){
+  const res = await api("/auth/retry", { session_id: sid });
+  if(res) show("s-auth-id");
+}
+
+function exitToLanding(){
+  startOver();
+}
+
+function routeAfterAuth(res){
+  if(res.step === "service_diagnosis")    { renderDiagnosis(res.monitoring); show("s-service-diagnosis"); }
+  else if(res.step === "service_not_found") show("s-service-notfound");
+  else if(res.step === "sales_has_proposals") { renderOldProposals(res.user, res.past_proposals); show("s-sales-hasproposals"); }
+  else if(res.step === "sales_new_proposal")  { prefillNewForm(res.user); show("s-sales-newform"); }
+}
+
+// ── Service: Diagnosis ────────────────────────
+function renderDiagnosis(mon){
+  const isIssue = mon.issue_flag;
+  document.getElementById("diagnosis-content").innerHTML = `
+    <div class="info-card ${isIssue ? 'issue' : 'ok'}">
+      <div class="ic-label">${isIssue ? '⚠️ Active Issue Detected' : '📊 System Status'}</div>
+      <div class="ic-text">${mon.explanation}</div>
+      <span class="ic-badge ${isIssue ? 'red' : 'green'}">${isIssue ? 'Issue Flagged' : 'Operating Normally'}</span>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-box"><div class="m-label">Cloudiness</div><div class="m-val">${mon.avg_cloudiness ?? '—'}%</div></div>
+      <div class="metric-box"><div class="m-label">Performance</div><div class="m-val">${mon.performance_score ?? '—'}%</div></div>
+      <div class="metric-box"><div class="m-label">Production</div><div class="m-val">${mon.total_production ?? '—'} <span style="font-size:11px">kWh</span></div></div>
+    </div>`;
+}
+
+async function serviceRes(happy){
+  const res = await api("/service/resolution", { session_id: sid, happy });
+  if(!res) return;
+  if(res.step === "service_nps") buildNPS();
+  else { buildCatList(); show("s-service-escalation"); }
+}
+
+// ── Service: NPS ──────────────────────────────
+function buildNPS(){
+  const wrap = document.getElementById("nps-btns");
+  wrap.innerHTML = "";
+  for(let i = 1; i <= 10; i++){
+    const b = document.createElement("button");
+    b.className = "nps-btn"; b.textContent = i;
+    b.onclick = () => {
+      selNPS = i;
+      wrap.querySelectorAll(".nps-btn").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      document.getElementById("btn-nps").disabled = false;
+    };
+    wrap.appendChild(b);
+  }
+  show("s-service-nps");
+}
+
+async function submitNPS(){
+  const btn = document.getElementById("btn-nps");
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  const res = await api("/service/nps", {
+    session_id: sid, rating: selNPS,
+    feedback: document.getElementById("nps-feedback").value
+  });
+  if(res) ended(res.message, null);
+}
+
+// ── Service: Escalation ───────────────────────
+const CATS = ["Production Issue","System Not Working","Communication Loss","Battery Failure","Inverter Failure","Others"];
+
+function buildCatList(){
+  cats = [];
+  const list = document.getElementById("cat-list");
+  list.innerHTML = "";
+  document.getElementById("esc-desc").value = "";
+  uploaded.esc = [];
+  document.getElementById("esc-chips").innerHTML = "";
+  CATS.forEach(c => {
+    const el = document.createElement("label");
+    el.className = "check-item";
+    el.innerHTML = `<input type="checkbox" onchange="toggleCat(this,'${c}',this.parentElement)"/><span>${c}</span>`;
+    list.appendChild(el);
+  });
+  document.getElementById("btn-esc").disabled = true;
+}
+
+function toggleCat(cb, cat, el){
+  if(cb.checked){ cats.push(cat); el.classList.add("selected"); }
+  else { cats = cats.filter(c => c !== cat); el.classList.remove("selected"); }
+  checkEsc();
+}
+function checkEsc(){
+  document.getElementById("btn-esc").disabled =
+    cats.length === 0 || document.getElementById("esc-desc").value.trim().length < 5;
+}
+
+function addFiles(inp, key){
+  Array.from(inp.files).forEach(f => {
+    if(!uploaded[key].includes(f.name)) uploaded[key].push(f.name);
+  });
+  renderChips(key);
+}
+function renderChips(key){
+  document.getElementById(`${key}-chips`).innerHTML =
+    uploaded[key].map((f,i) =>
+      `<div class="file-chip">📄 ${f}<button onclick="removeFile('${key}',${i})">×</button></div>`
+    ).join("");
+}
+function removeFile(key, idx){ uploaded[key].splice(idx, 1); renderChips(key); }
+
+async function submitEsc(){
+  const btn = document.getElementById("btn-esc");
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  const res = await api("/service/escalation", {
+    session_id: sid,
+    category: cats.join(", "),
+    description: document.getElementById("esc-desc").value.trim(),
+    attachments: uploaded.esc
+  });
+  btn.textContent = "Submit & Check Availability"; btn.disabled = false;
+  if(res) handleAgentResult(res);
+}
+
+function handleAgentResult(res){
+  if(res.step === "service_agent_offer"){
+    document.getElementById("offer-title").textContent = `${res.agent_name} is Available`;
+    document.getElementById("offer-msg").textContent = res.message;
+    show("s-agent-offer");
+  } else {
+    ended(res.message, res.ticket_id);
+  }
+}
+
+async function agentHandoff(startChat){
+  const btn = startChat
+    ? document.getElementById("btn-livechat")
+    : document.getElementById("btn-ticket");
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  const res = await api("/service/agent_handoff", { session_id: sid, start_chat: startChat });
+  btn.textContent = startChat ? "💬 Start Live Chat" : "📋 Create Ticket"; btn.disabled = false;
+  if(!res) return;
+  if(res.step === "agent_chat") startChat_(res.agent_name, res.opening_message);
+  else ended(res.message, res.ticket_id);
+}
+
+async function submitExternal(){
+  const cat  = document.getElementById("ext-cat").value;
+  const desc = document.getElementById("ext-desc").value.trim();
+  if(!cat){ toast("Please select an issue category", true); return; }
+  if(!desc){ toast("Please describe the issue", true); return; }
+  const btn = document.getElementById("btn-ext");
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  const res = await api("/service/external", {
+    session_id: sid,
+    size:      document.getElementById("ext-size").value,
+    brand:     document.getElementById("ext-brand").value,
+    year:      document.getElementById("ext-year").value,
+    monitoring:document.getElementById("ext-mon").value,
+    installer: document.getElementById("ext-installer").value,
+    category: cat, description: desc, attachments: uploaded.ext
+  });
+  btn.textContent = "Submit →"; btn.disabled = false;
+  if(res) handleAgentResult(res);
+}
+
+// ── Sales: old proposals ──────────────────────
+function renderOldProposals(user, proposals){
+  document.getElementById("sales-greet").textContent = `Hi ${user?.name || "there"}, welcome back! 👋`;
+  if(!proposals || proposals.length === 0){
+    document.getElementById("old-proposals").innerHTML =
+      `<div class="info-card"><div class="ic-text">No past proposals found.</div></div>`;
+    return;
+  }
+  document.getElementById("old-proposals").innerHTML = proposals.map(p => `
+    <div class="proposal-card" id="op-${p.proposal_id}" onclick="selOld(${p.proposal_id},this)">
+      <div class="select-dot"></div>
+      <div class="pc-name">${p.proposal_name || 'Proposal'}</div>
+      <div class="pc-grid">
+        <div class="pc-item"><div class="label">Size</div><div class="val">${p.system_size_kw ?? '—'} kW</div></div>
+        <div class="pc-item"><div class="label">Status</div><div class="val">${p.status || '—'}</div></div>
+        <div class="pc-item"><div class="label">Yearly Savings</div><div class="val">${p.estimated_yearly_savings ? '$'+p.estimated_yearly_savings : '—'}</div></div>
+        <div class="pc-item"><div class="label">Created</div><div class="val">${p.date_created || '—'}</div></div>
+      </div>
+      <div class="pc-price">${p.approx_price || '—'}</div>
+    </div>`).join("");
+}
+function selOld(id, el){
+  document.querySelectorAll("#old-proposals .proposal-card").forEach(c => c.classList.remove("selected"));
+  el.classList.add("selected"); selOldId = id;
+  document.getElementById("btn-old-proceed").disabled = false;
+}
+async function proceedOld(){
+  const btn = document.getElementById("btn-old-proceed");
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  const res = await api("/sales/select_old", { session_id: sid, proposal_id: selOldId });
+  btn.textContent = "Proceed with Selected →"; btn.disabled = false;
+  if(!res) return;
+  if(res.error){ toast(res.error, true); return; }
+  renderConfirm(res);
+}
+
+// ── Sales: new form ───────────────────────────
+function prefillNewForm(user){
+  if(!user) return;
+  if(user.name && user.name !== "Valued Customer")
+    document.getElementById("np-name").value = user.name;
+  const hasEmail = user.email && user.email !== "nan" && user.email !== "";
+  const hasPhone = user.phone && user.phone !== "nan" && user.phone !== "";
+  document.getElementById("np-email-wrap").style.display = hasEmail ? "none" : "block";
+  document.getElementById("np-phone-wrap").style.display = hasPhone ? "none" : "block";
+}
+
+function pick(el, group, val){
+  const grpMap = { seg:"seg-btns", num:"num-btns", tier:"tier-btns" };
+  document.getElementById(grpMap[group]).querySelectorAll(".toggle-btn")
+    .forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  picks[group] = val;
+  if(group === "seg") toggleTier();
+}
+
+function toggleTier(){
+  const brand = document.getElementById("np-brand").value.trim().toLowerCase();
+  document.getElementById("tier-wrap").style.display =
+    (!brand || brand === "none") ? "block" : "none";
+}
+
+async function submitProposalForm(){
+  document.getElementById("np-err").innerHTML = "";
+  if(!picks.seg){
+    document.getElementById("np-err").innerHTML =
+      `<div class="alert alert-err" style="margin-bottom:16px">⚠️ Please select a customer segment.</div>`;
+    return;
+  }
+  const bill = parseFloat(document.getElementById("np-bill").value);
+  if(!bill || bill <= 0){
+    document.getElementById("np-err").innerHTML =
+      `<div class="alert alert-err" style="margin-bottom:16px">⚠️ Please enter a valid monthly bill.</div>`;
+    return;
+  }
+  const btn = document.getElementById("btn-gen");
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  const res = await api("/sales/proposal", {
+    session_id:  sid,
+    name:        document.getElementById("np-name").value.trim() || "Customer",
+    city:        document.getElementById("np-city").value.trim(),
+    postal_code: document.getElementById("np-postal").value.trim(),
+    email:       document.getElementById("np-email").value.trim(),
+    phone:       document.getElementById("np-phone").value.trim(),
+    segment:     picks.seg,
+    bill:        bill,
+    increase:    parseFloat(document.getElementById("np-increase").value) || 0,
+    num_options: picks.num || 1,
+    brand_pref:  document.getElementById("np-brand").value.trim(),
+    tier_pref:   picks.tier || "Standard",
+  });
+  btn.textContent = "Generate My Proposals →"; btn.disabled = false;
+  if(!res) return;
+  renderNewProposals(res.proposals);
+  show("s-sales-proposals");
+}
+
+function renderNewProposals(proposals){
+  selNewId = null;
+  document.getElementById("btn-new-proceed").disabled = true;
+  document.getElementById("new-proposals").innerHTML = proposals.map(p => `
+    <div class="proposal-card" id="np-${p.proposal_id}" onclick="selNew(${p.proposal_id},this)">
+      <div class="select-dot"></div>
+      <div class="pc-name">${p.proposal_name}</div>
+      <div class="pc-grid">
+        <div class="pc-item"><div class="label">System Size</div><div class="val">${p.system_size_kw} kW</div></div>
+        <div class="pc-item"><div class="label">Monthly Savings</div><div class="val">$${p.monthly_savings}</div></div>
+        <div class="pc-item"><div class="label">Yearly Savings</div><div class="val">$${p.estimated_yearly_savings}</div></div>
+        <div class="pc-item"><div class="label">Payback Period</div><div class="val">${p.payback_years} yrs</div></div>
+      </div>
+      <div class="pc-price">${p.approx_price}</div>
+    </div>`).join("");
+}
+function selNew(id, el){
+  document.querySelectorAll("#new-proposals .proposal-card").forEach(c => c.classList.remove("selected"));
+  el.classList.add("selected"); selNewId = id;
+  document.getElementById("btn-new-proceed").disabled = false;
+}
+async function proceedNew(){
+  const btn = document.getElementById("btn-new-proceed");
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  const res = await api("/sales/select_new", { session_id: sid, proposal_id: selNewId });
+  btn.textContent = "Proceed with Selected →"; btn.disabled = false;
+  if(!res) return;
+  if(res.error){ toast(res.error, true); return; }
+  renderConfirm(res);
+}
+
+// ── Sales: confirm ────────────────────────────
+function renderConfirm(res){
+  const p = res.selected_proposal || {};
+  document.getElementById("confirm-card").innerHTML = `
+    <div class="ic-label">Selected Proposal</div>
+    <div style="font-weight:600;font-size:16px;margin-bottom:8px">${p.proposal_name || '—'}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;color:var(--muted)">
+      <div>Size: <strong style="color:var(--light)">${p.system_size_kw || '—'} kW</strong></div>
+      <div>Monthly: <strong style="color:var(--light)">$${p.monthly_savings || '—'}</strong></div>
+    </div>
+    <div style="margin-top:10px;font-family:var(--font-h);font-size:18px;color:var(--sun)">${p.approx_price || '—'}</div>`;
+
+  const sec = document.getElementById("confirm-agent-section");
+  if(res.agent_available){
+    sec.innerHTML = `
+      <p style="color:var(--muted);font-size:14px;margin-bottom:16px">
+        <strong style="color:var(--green)">✅ ${res.agent_name}</strong> is available right now.
+        How would you like to connect?
+      </p>
+      <div class="btn-row">
+        <button class="btn btn-outline" onclick="contactPref('call')">📞 Request a Call</button>
+        <button class="btn btn-primary" onclick="contactPref('chat')">💬 Live Chat</button>
+      </div>`;
+  } else {
+    sec.innerHTML = `
+      <p style="color:var(--muted);font-size:14px;margin-bottom:16px">Our sales team is currently unavailable, but we've logged your interest.</p>
+      <button class="btn btn-primary" onclick="contactPref('offline')">Submit Interest →</button>`;
+  }
+  show("s-sales-confirm");
+}
+
+async function contactPref(pref){
+  const res = await api("/sales/contact_pref", { session_id: sid, pref });
+  if(!res) return;
+  if(res.step === "agent_chat") startChat_(res.agent_name, res.opening_message);
+  else ended(res.message, null);
+}
+
+// ── Agent Chat ────────────────────────────────
+function startChat_(agentName, opening){
+  document.getElementById("chat-agent-name").textContent = agentName;
+  document.getElementById("chat-msgs").innerHTML = "";
+  appendMsg("agent", opening, agentName);
+  show("s-agent-chat");
+}
+function appendMsg(role, text, name){
+  const box = document.getElementById("chat-msgs");
+  const row = document.createElement("div");
+  row.className = `msg ${role}`;
+  row.innerHTML = `
+    <div class="msg-av">${role === "agent" ? "👤" : "🧑"}</div>
+    <div>
+      <div class="bubble">${text}</div>
+      <div class="msg-time">${role === "agent" ? name : "You"} · ${new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}</div>
+    </div>`;
+  box.appendChild(row);
+  box.scrollTop = box.scrollHeight;
+}
+function showTyping(){
+  const box = document.getElementById("chat-msgs");
+  const row = document.createElement("div");
+  row.className = "msg agent"; row.id = "typing";
+  row.innerHTML = `<div class="msg-av">👤</div>
+    <div class="bubble typing-bubble"><span></span><span></span><span></span></div>`;
+  box.appendChild(row); box.scrollTop = box.scrollHeight;
+}
+function hideTyping(){ const e = document.getElementById("typing"); if(e) e.remove(); }
+function chatKey(e){ if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); sendChat(); } autoResize(e.target); }
+function autoResize(el){ el.style.height = "auto"; el.style.height = Math.min(el.scrollHeight, 100) + "px"; }
+async function sendChat(){
+  const inp = document.getElementById("chat-input");
+  const text = inp.value.trim(); if(!text) return;
+  const agentName = document.getElementById("chat-agent-name").textContent;
+  appendMsg("user", text, "You");
+  inp.value = ""; inp.style.height = "auto";
+  document.getElementById("btn-send").disabled = true;
+  showTyping();
+  const res = await api("/agent/chat", { session_id: sid, message: text });
+  hideTyping();
+  document.getElementById("btn-send").disabled = false;
+  if(res) appendMsg("agent", res.reply, res.agent_name || agentName);
+}
+
+// ── Ended ─────────────────────────────────────
+function ended(msg, ticketId, icon = "✅", title = "All Done!"){
+  document.getElementById("ended-icon").textContent = icon;
+  document.getElementById("ended-title").textContent = title;
+  document.getElementById("ended-msg").textContent = msg || "";
+  if(ticketId){
+    document.getElementById("ended-ticket-wrap").style.display = "block";
+    document.getElementById("ended-ticket-num").textContent = `#${ticketId}`;
+  } else {
+    document.getElementById("ended-ticket-wrap").style.display = "none";
+  }
+  show("s-ended");
+}
+
+function startOver(){
+  sid = mkId();
+  picks = { seg: null, num: 1, tier: "Standard" };
+  selOldId = selNewId = selNPS = null;
+  cats = []; uploaded = { esc: [], ext: [] };
+  api("/reset", { session_id: sid });
+  document.getElementById("auth-banner").innerHTML = "";
+  show("s-landing");
+}
+
+// ── Toast ─────────────────────────────────────
+function toast(msg, isErr = false, isOk = false){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (isErr ? " err" : isOk ? " ok" : "");
+  setTimeout(()=>t.classList.remove("show"),3200);
+}
+
+// ── API ───────────────────────────────────────
+async function api(path, body){
+  try{
+    const r = await fetch(API + path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    if(!r.ok){
+      const txt = await r.text();
+      toast(`Server error ${r.status}: ${txt.slice(0, 80)}`, true);
+      return null;
+    }
+    return await r.json();
+  } catch(e){
+    toast("Cannot reach backend. Is uvicorn running on port 8000?", true);
+    return null;
+  }
+}
+
+// ── Init ──────────────────────────────────────
+selectId("email");
+document.getElementById("np-brand").addEventListener("input", toggleTier);
+picks.num = 1;
+picks.tier = "Standard";
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+agent_id,agent_name,department,is_online
+701,Alice,Sales,True
+702,Bob,Sales,False
+703,Charlie,Service,True
+704,Diana,Service,True
+705,Eve,Sales,True

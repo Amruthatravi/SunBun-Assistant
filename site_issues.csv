@@ -1,0 +1,11 @@
+site_id,issue_flag,issue_text,recommended_action_text
+101,True,"Communication Loss","Please check the inverter's internet connection."
+102,False,"",""
+103,True,"Inverter Failure","A technician has been dispatched to assess the inverter."
+104,False,"",""
+105,True,"Communication Loss","Please restart your home router and then the inverter."
+106,False,"",""
+107,True,"Inverter Failure","Please contact support to schedule a replacement."
+108,False,"",""
+109,True,"Communication Loss","The monitoring portal is undergoing maintenance. Please check back later."
+110,False,"",""

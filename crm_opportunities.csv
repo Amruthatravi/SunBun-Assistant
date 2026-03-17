@@ -1,0 +1,6 @@
+opportunity_id,prospect_id,chosen_proposal_id,status,next_action_date
+901,201,,New,2024-07-15
+902,202,512,Contacted,2024-07-16
+903,203,,New,2024-07-15
+904,204,505,Follow-up,2024-07-18
+905,205,530,Closed,2024-07-20

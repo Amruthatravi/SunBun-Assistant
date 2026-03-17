@@ -1,0 +1,4 @@
+ticket_id,customer_id,site_id,issue_category,description,status,date_created
+401,2,102,"Communication Loss","My inverter is not reporting data to the app.","Open",2024-07-02
+402,5,105,"Production Issue","My system seems to be producing less than usual, even on sunny days.","In Progress",2024-07-03
+403,9,109,"System Not Working","The whole system is offline. The breaker might have tripped but I'm not sure.","Open",2024-07-05

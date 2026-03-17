@@ -1,0 +1,16 @@
+email,otp,timestamp
+john.doe@example.com,123456,2024-07-12T10:00:00Z
+jane.smith@example.com,654321,2024-07-12T10:05:00Z
+peter.jones@example.com,112233,2024-07-12T10:10:00Z
+mary.williams@example.com,445566,2024-07-12T10:15:00Z
+david.brown@example.com,778899,2024-07-12T10:20:00Z
+susan.miller@example.com,998877,2024-07-12T10:25:00Z
+michael.davis@example.com,665544,2024-07-12T10:30:00Z
+patricia.garcia@example.com,332211,2024-07-12T10:35:00Z
+robert.rodriguez@example.com,223344,2024-07-12T10:40:00Z
+jennifer.martinez@example.com,556677,2024-07-12T10:45:00Z
+laura.chen@example.com,121212,2024-07-12T11:00:00Z
+chris.lee@example.com,232323,2024-07-12T11:05:00Z
+brian.nguyen@example.com,343434,2024-07-12T11:10:00Z
+sandra.kim@example.com,454545,2024-07-12T11:15:00Z
+kevin.patel@example.com,565656,2024-07-12T11:20:00Z

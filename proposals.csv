@@ -1,0 +1,11 @@
+proposal_id,customer_id,proposal_name,approx_price,estimated_yearly_savings,date_created,status,system_size_kw,inverter_brand,module_brand
+301,1,"5.5 kW Residential - Enphase + Trina",16500,1200,2022-02-20,Viewed,5.5,"Enphase","Trina"
+302,2,"7.2 kW Residential - SolarEdge + Jinko",21600,1500,2021-10-15,Sent,7.2,"SolarEdge","Jinko"
+303,4,"8.5 kW Residential - Sungrow + Trina",23800,1800,2022-07-25,Sent,8.5,"Sungrow","Trina"
+304,6,"9.0 kW Residential - SolarEdge + Waaree",27000,2000,2021-08-12,Viewed,9.0,"SolarEdge","Waaree"
+305,8,"10.1 kW Residential - Sungrow + Jinko",28300,2200,2023-01-30,Accepted,10.1,"Sungrow","Jinko"
+306,10,"6.8 kW Residential - SolarEdge + Trina",20400,1400,2022-09-05,Sent,6.8,"SolarEdge","Trina"
+307,1,"6.0 kW Premium - Enphase + Waaree",19000,1300,2024-06-28,Sent,6.0,"Enphase","Waaree"
+308,2,"7.5 kW Budget - GoodWe + Jinko",19500,1450,2024-07-01,Sent,7.5,"GoodWe","Jinko"
+309,4,"8.0 kW Standard - Sungrow + Trina",22000,1750,2024-07-05,Viewed,8.0,"Sungrow","Trina"
+310,6,"10.0 kW Premium - SolarEdge + Waaree",30000,2100,2024-07-10,Sent,10.0,"SolarEdge","Waaree"
