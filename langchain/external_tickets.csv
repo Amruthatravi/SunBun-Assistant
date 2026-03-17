@@ -1,2 +1,0 @@
-ticket_id,user_contact,system_size,inverter_brand,install_year,monitoring_active,installer_name,issue_category,description,attachments
-404,atr@example.com,5kW,SunRun,2022,Yes,SolarPro,Battery Failure,Test ticket,Skip
